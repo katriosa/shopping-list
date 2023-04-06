@@ -1,0 +1,30 @@
+.filter {
+  width: 30rem;
+  margin: 2rem auto;
+  max-width: 80%;
+}
+
+.filter-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.filter-input input {
+  font: inherit;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.15rem 0.25rem;
+}
+
+.filter-input input:focus {
+  outline: none;
+  border-bottom-color: #ff2058;
+}
+
+@media (max-width: 768px) {
+  .filter-input {
+    flex-direction: column;
+  }
+}
