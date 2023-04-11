@@ -2,7 +2,7 @@ import AddItem from "./AddItem";
 import Filter from "./Fillter";
 import ShowItems from "./ShowItems";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const Items = () => {
   const [items, setItems] = useState([]);
@@ -21,6 +21,14 @@ const Items = () => {
         }
         setItems(loadedItems);
       });
+  }, []);
+
+  useEffect(() => {
+    console.log("Rendering", items);
+  }, [items]);
+
+  const filteredItemsHandler = useCallback((filteredItems) => {
+    setItems(filteredItems);
   }, []);
 
   const saveDataHandler = (enteredItem) => {
@@ -44,7 +52,7 @@ const Items = () => {
       <AddItem onSaveData={saveDataHandler} />
 
       <section>
-        <Filter />
+        <Filter onFilterItems={filteredItemsHandler} />
         <ShowItems items={items} />
       </section>
     </>
