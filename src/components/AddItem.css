@@ -5,7 +5,7 @@
 }
 
 .form-control input,
-label {
+.form-control label {
   display: block;
   width: 100%;
 }
