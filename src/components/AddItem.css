@@ -22,3 +22,9 @@
   outline: none;
   border-bottom-color: #ff2058;
 }
+
+.item-form__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

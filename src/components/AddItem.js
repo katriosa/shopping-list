@@ -1,6 +1,7 @@
 import Card from "../UI/Card";
 import "./AddItem.css";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import LoadingIndicator from "../UI/LoadingIndicator";
 
 const AddItem = React.memo((props) => {
   const [enteredName, setEnteresName] = useState("");
@@ -18,9 +19,9 @@ const AddItem = React.memo((props) => {
     e.preventDefault();
     const enteredData = {
       name: enteredName,
-      amount: enteredAmount
-    }
-    props.onSaveData(enteredData)
+      amount: enteredAmount,
+    };
+    props.onSaveData(enteredData);
   };
 
   return (
@@ -45,8 +46,9 @@ const AddItem = React.memo((props) => {
               onChange={amountInputHandler}
             />
           </div>
-          <div>
+          <div className="item-form__actions">
             <button type="submit">Add Item</button>
+            {props.loading && <LoadingIndicator />}
           </div>
         </form>
       </Card>
