@@ -8,12 +8,21 @@ const Items = () => {
   const [items, setItems] = useState([]);
 
   const saveDataHandler = (enteredItem) => {
-    setItems((prev) => [
-      ...prev,
-      { id: Math.random().toString(), ...enteredItem },
-    ]);
+    fetch("https://hooks-2a60a-default-rtdb.firebaseio.com/items.json", {
+      method: "POST",
+      body: JSON.stringify(enteredItem),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        setItems((prev) => [
+          ...prev,
+          { id: responseData.name, ...enteredItem },
+        ]);
+      });
   };
-  console.log(items);
   return (
     <>
       <AddItem onSaveData={saveDataHandler} />
