@@ -6,7 +6,7 @@ const ShowItems = (props) => {
       <h2>Loaded Items</h2>
       <ul>
         {props.items.map((i) => (
-          <li key={i.id}>
+          <li key={i.id} onClick={props.onRemoveItem.bind(this, i.id)}>
             <span>{i.name}</span>
             <span>{i.amount}x</span>
           </li>

@@ -31,13 +31,25 @@ const Items = () => {
         ]);
       });
   };
+
+  const removeItemHandler = (itemId) => {
+    fetch(
+      `https://hooks-2a60a-default-rtdb.firebaseio.com/items/${itemId}.json`,
+      {
+        method: "DELETE",
+      }
+    ).then((response) => {
+      setItems((prev) => prev.filter((item) => item.id !== itemId));
+    });
+  };
+
   return (
     <>
       <AddItem onSaveData={saveDataHandler} />
 
       <section>
         <Filter onFilterItems={filteredItemsHandler} />
-        <ShowItems items={items} />
+        <ShowItems items={items} onRemoveItem={removeItemHandler} />
       </section>
     </>
   );
