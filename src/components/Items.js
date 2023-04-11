@@ -8,22 +8,6 @@ const Items = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch("https://hooks-2a60a-default-rtdb.firebaseio.com/items.json")
-      .then((response) => response.json())
-      .then((responseData) => {
-        const loadedItems = [];
-        for (const key in responseData) {
-          loadedItems.push({
-            id: key,
-            name: responseData[key].name,
-            amount: responseData[key].amount,
-          });
-        }
-        setItems(loadedItems);
-      });
-  }, []);
-
-  useEffect(() => {
     console.log("Rendering", items);
   }, [items]);
 
