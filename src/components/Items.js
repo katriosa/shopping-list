@@ -2,10 +2,26 @@ import AddItem from "./AddItem";
 import Filter from "./Fillter";
 import ShowItems from "./ShowItems";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Items = () => {
   const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetch("https://hooks-2a60a-default-rtdb.firebaseio.com/items.json")
+      .then((response) => response.json())
+      .then((responseData) => {
+        const loadedItems = [];
+        for (const key in responseData) {
+          loadedItems.push({
+            id: key,
+            name: responseData[key].name,
+            amount: responseData[key].amount,
+          });
+        }
+        setItems(loadedItems);
+      });
+  }, []);
 
   const saveDataHandler = (enteredItem) => {
     fetch("https://hooks-2a60a-default-rtdb.firebaseio.com/items.json", {
