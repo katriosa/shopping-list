@@ -3,7 +3,7 @@ import Filter from "./Fillter";
 import ShowItems from "./ShowItems";
 import ErrorModal from "../UI/ErrorModal";
 
-import { useReducer, useEffect, useCallback } from "react";
+import { useReducer, useEffect, useCallback, useMemo } from "react";
 
 const itemReducer = (currentItems, action) => {
   switch (action.type) {
@@ -39,9 +39,6 @@ const Items = () => {
     loading: false,
     error: null,
   });
-  // const [items, setItems] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
 
   useEffect(() => {
     console.log("Rendering", items);
@@ -52,9 +49,8 @@ const Items = () => {
     dispatch({ type: "SET", items: filteredItems });
   }, []);
 
-  const saveDataHandler = (enteredItem) => {
+  const saveDataHandler = useCallback((enteredItem) => {
     dispatchHttp({ type: "SEND" });
-    // setIsLoading(true);
     fetch("https://hooks-2a60a-default-rtdb.firebaseio.com/items.json", {
       method: "POST",
       body: JSON.stringify(enteredItem),
@@ -62,47 +58,40 @@ const Items = () => {
     })
       .then((response) => {
         dispatchHttp({ type: "RESPONSE" });
-        // setIsLoading(false);
         return response.json();
       })
       .then((responseData) => {
-        // setItems((prev) => [
-        //   ...prev,
-        //   { id: responseData.name, ...enteredItem },
-        // ]);
         dispatch({
           type: "ADD",
           item: { id: responseData.name, ...enteredItem },
         });
       });
-  };
+  }, []);
 
-  const removeItemHandler = (itemId) => {
+  const removeItemHandler = useCallback((itemId) => {
     dispatchHttp({ type: "SEND" });
-    // setIsLoading(true);
     fetch(
-      `https://hooks-2a60a-default-rtdb.firebaseio.com/items/${itemId}.jon`,
+      `https://hooks-2a60a-default-rtdb.firebaseio.com/items/${itemId}.json`,
       {
         method: "DELETE",
       }
     )
       .then((response) => {
         dispatchHttp({ type: "RESPONSE" });
-        // setIsLoading(false);
-        // setItems((prev) => prev.filter((item) => item.id !== itemId));
         dispatch({ type: "DELETE", id: itemId });
       })
       .catch((error) => {
-        // setError("Something went wrong!");
         dispatchHttp({ type: "ERROR", errorMessage: "Something went wrong!" });
       });
-  };
+  }, []);
 
-  const clearError = () => {
-    // setError(null);
-    // setIsLoading(false);
+  const clearError = useCallback(() => {
     dispatchHttp({ type: "CLEAR" });
-  };
+  }, []);
+
+  const itemList = useMemo(() => {
+    return <ShowItems items={items} onRemoveItem={removeItemHandler} />;
+  }, [items, removeItemHandler]);
 
   return (
     <>
@@ -113,7 +102,7 @@ const Items = () => {
 
       <section>
         <Filter onFilterItems={filteredItemsHandler} />
-        <ShowItems items={items} onRemoveItem={removeItemHandler} />
+        {itemList}
       </section>
     </>
   );
